@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount } from 'svelte';
 
     let font_size;
     let textarea;
@@ -25,6 +25,6 @@
     bind:this={textarea}
     on:input={resize_textarea}
     bind:value={sql}
-    class="textarea textarea-bordered focus:outline-none overflow-hidden resize-none w-full"
+    class="textarea-bordered textarea w-full resize-none overflow-hidden focus:outline-none"
     style="font-size: {font_size}px; line-height: {font_size * 1.5}px;"
 />

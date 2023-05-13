@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ["./index.html", "./src/**/*.{html,ts,svelte}"],
+    content: ['./index.html', './src/**/*.{html,ts,svelte}'],
     safelist: [
         {
-            pattern: /h-*/,
-        },
+            pattern: /h-*/
+        }
     ],
     theme: {
-        extend: {},
+        extend: {}
     },
-    plugins: [require("daisyui")],
+    plugins: [require('daisyui')]
 };
