@@ -1,7 +1,7 @@
 <script lang="ts">
     import { open, save } from '@tauri-apps/api/dialog';
     import { readTextFile, writeTextFile } from '@tauri-apps/api/fs';
-    import { cells } from './Stores';
+    import { cells, ids } from './Stores';
 
     function execute_all() {
         for (const cell of $cells) {
@@ -28,7 +28,11 @@
     async function get_full_sql() {
         let full_sql = '';
         for (const cell of $cells) {
-            full_sql += await cell.get_sql();
+            try {
+                full_sql += await cell.get_sql();
+            } catch {
+                full_sql += '';
+            }
         }
 
         return full_sql;
