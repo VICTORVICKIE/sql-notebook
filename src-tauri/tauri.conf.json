@@ -12,15 +12,21 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
       "shell": {
-        "all": false,
         "open": true,
         "sidecar": true,
         "scope": [{"name": "bin/sqlite3", "sidecar": true, "args": true}]
       },
       "os": {
         "all": true
+      },
+      "dialog": {
+        "open": true,
+        "save": true
+      },
+      "fs": {
+        "readFile": true,
+        "writeFile": true
       }
     },
     "bundle": {
@@ -46,7 +52,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "sql-book",
+        "title": "SQLite Book",
         "width": 800,
         "height": 600
       }
