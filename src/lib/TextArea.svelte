@@ -4,7 +4,7 @@
     let font_size;
     let textarea;
     export let sql: string;
-    
+
     function resize_textarea() {
         const newline_count = (textarea.value.match(/\n/g) || []).length;
         const line_height = font_size * 1.5;
