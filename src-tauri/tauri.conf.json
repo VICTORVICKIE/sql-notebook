@@ -17,7 +17,7 @@
         "all": false,
         "open": true,
         "sidecar": true,
-        "scope": [{"name": "binaries/sqlite3", "sidecar": true, "args": true}]
+        "scope": [{"name": "bin/sqlite3", "sidecar": true, "args": true}]
       },
       "os": {
         "all": true
@@ -34,7 +34,7 @@
       ],
       "identifier": "com.victor.dev",
       "targets": "all",
-      "externalBin": ["binaries/sqlite3"]
+      "externalBin": ["bin/sqlite3"]
     },
     "security": {
       "csp": null

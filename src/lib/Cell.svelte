@@ -10,7 +10,7 @@
 
     async function execute() {
         left_icon = "line-md:loading-twotone-loop";
-        output = Command.sidecar("binaries/sqlite3", [
+        output = Command.sidecar("bin/sqlite3", [
             "-header",
             "-box",
             "temp.db",
