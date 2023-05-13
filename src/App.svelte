@@ -1,18 +1,23 @@
 <script lang="ts">
     import Cell from "./lib/Cell.svelte";
+    import { cells, ids } from "./lib/Stores";
+    import ToolBar from "./lib/ToolBar.svelte";
+
+    function add_cell(index: number, id: number) {
+        $ids.splice(index + 1, 0, id);
+        $ids = $ids;
+    }
 </script>
 
-<div class="hero min-h-screen bg-base-200">
-    <div class="hero-content w-full text-center flex-col">
-        <Cell />
-        <div class="divider">
-            <button class="btn">
-                <iconify-icon
-                    icon="ph:plus-square-duotone"
-                    width="24"
-                    height="24"
-                />
-            </button>
-        </div>
+<div class="flex flex-col min-h-screen">
+    <ToolBar />
+    <div class="flex flex-col mt-24 flex-1">
+        {#each $ids as id, index (id)}
+            <Cell
+                bind:this={$cells[index]}
+                on:add={() => add_cell(index, $ids.length)}
+                {id}
+            />
+        {/each}
     </div>
 </div>
