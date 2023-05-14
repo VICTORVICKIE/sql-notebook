@@ -1,0 +1,25 @@
+CREATE TABLE authors (
+  id INT PRIMARY KEY,
+  name VARCHAR(100)
+);
+--Cell--Separator--
+INSERT INTO authors (id, name)
+VALUES (1, 'Ernest Hemingway'),
+       (2, 'Jane Austen'),
+       (3, 'F. Scott Fitzgerald');
+--Cell--Separator--
+CREATE TABLE books (
+  id INT PRIMARY KEY,
+  title VARCHAR(100),
+  author_id INT,
+  FOREIGN KEY (author_id) REFERENCES authors(id)
+);
+--Cell--Separator--
+INSERT INTO books (id, title, author_id)
+VALUES (1, 'The Old Man and the Sea', 1),
+       (2, 'Pride and Prejudice', 2),
+       (3, 'The Great Gatsby', 3);
+--Cell--Separator--
+SELECT books.title, authors.name
+FROM books
+JOIN authors ON books.author_id = authors.id;
