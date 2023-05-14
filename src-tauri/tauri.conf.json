@@ -29,7 +29,7 @@
             "fs": {
                 "readFile": true,
                 "writeFile": true,
-                "removeFile":true,
+                "removeFile": true,
                 "exists": true,
                 "createDir": true,
                 "scope": ["$LOCALDATA/SQLite-Notebook/", "$LOCALDATA/SQLite-Notebook/**"]
