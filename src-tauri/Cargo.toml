@@ -1,10 +1,10 @@
 [package]
-name = "sql-book"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+name = "sqlite-book"
+version = "2.0.0"
+description = "A Lightweight & Blazingly Fast SQL Notebook App for learning SQL Interactively."
+authors = ["victor"]
+license = "MIT"
+repository = "https://github.com/VICTORVICKIE/sql-notebook/"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

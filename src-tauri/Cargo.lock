@@ -2489,8 +2489,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "sql-book"
-version = "0.0.0"
+name = "sqlite-book"
+version = "2.0.0"
 dependencies = [
  "serde",
  "serde_json",
