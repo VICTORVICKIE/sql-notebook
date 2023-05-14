@@ -1,71 +1,92 @@
 <script lang="ts">
     import { open, save } from '@tauri-apps/api/dialog';
     import { readTextFile, writeTextFile } from '@tauri-apps/api/fs';
-    import { cells, ids } from './Stores';
+    import { createEventDispatcher } from 'svelte';
+    import { cell_separator, cells, ids } from './Stores';
 
-    function execute_all() {
+    const dispatch = createEventDispatcher();
+
+    async function get_full_sql(): Promise<string> {
+        let cell_sequels = [];
         for (const cell of $cells) {
-            cell.execute();
-        }
-    }
-
-    async function open_sql() {
-        const selected = await open({
-            multiple: false,
-            filters: [
-                {
-                    name: 'SQL',
-                    extensions: ['sql']
-                }
-            ]
-        });
-        if (selected !== null) {
-            let sql = await readTextFile(selected as string);
-            $cells[0].set_sql(sql);
-        }
-    }
-
-    async function get_full_sql() {
-        let full_sql = '';
-        for (const cell of $cells) {
-            try {
-                full_sql += await cell.get_sql();
-            } catch {
-                full_sql += '';
+            if (cell) {
+                cell_sequels.push(await cell.get_sql());
             }
         }
-
+        let full_sql = cell_sequels.join(cell_separator);
         return full_sql;
     }
 
-    async function save_sql() {
-        const file_path = await save({
-            filters: [
-                {
-                    name: 'SQL',
-                    extensions: ['sql']
+    // function execute_all() {
+    //     for (const cell of $cells) {
+    //         if (cell) {
+    //             cell.execute();
+    //         }
+    //     }
+    // }
+    function execute_all() {
+        let index = 0;
+        const execute_next_cell = () => {
+            const cell = $cells[index];
+            if (cell) {
+                cell.execute();
+                index++;
+                if (index < $cells.length) {
+                    setTimeout(execute_next_cell, 500);
                 }
-            ]
+            }
+        };
+
+        execute_next_cell();
+    }
+
+    async function open_sqlnb() {
+        const selected = await open({
+            multiple: false,
+            filters: [{ name: 'SQLite NoteBook', extensions: ['sqlnb'] }]
         });
-        let full_sql = await get_full_sql();
+        if (selected === null) {
+            return;
+        }
+
+        let sqlnb = await readTextFile(selected as string);
+        let cell_sequels = sqlnb.split(cell_separator);
+
+        $ids = [...Array(cell_sequels.length).keys()];
+        dispatch('populate', { selected });
+        cell_sequels = [];
+    }
+
+    async function save_sqlnb() {
+        const file_path = await save({
+            filters: [{ name: 'SQLite NoteBook', extensions: ['sqlnb'] }]
+        });
+        const full_sql = await get_full_sql();
         if (full_sql) await writeTextFile(file_path, full_sql);
     }
 </script>
 
 <div class="navbar fixed top-0 z-10 bg-base-200">
     <div class="navbar-start flex gap-0">
-        <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={open_sql}
-            ><iconify-icon width="24" height="24" icon="fluent:folder-open-24-regular" /></button
-        ><button class="btn-ghost min-h-8 btn h-8 w-6" on:click={save_sql}
-            ><iconify-icon width="24" height="24" icon="fluent:save-24-regular" /></button
-        >
+        <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={open_sqlnb}>
+            <iconify-icon width="24" height="24" icon="fluent:folder-open-24-regular" />
+        </button>
+
+        <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={save_sqlnb}>
+            <iconify-icon
+                class="text-purple-400"
+                width="24"
+                height="24"
+                icon="fluent:save-24-regular"
+            />
+        </button>
     </div>
     <div class="navbar-center">
         <p class="text-xl normal-case">SQLite Book</p>
     </div>
     <div class="navbar-end">
-        <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={execute_all}
-            ><iconify-icon width="24" height="24" icon="fluent:play-multiple-16-regular" /></button
-        >
+        <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={execute_all}>
+            <iconify-icon width="24" height="24" icon="fluent:play-multiple-16-regular" />
+        </button>
     </div>
 </div>
