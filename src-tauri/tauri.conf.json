@@ -21,12 +21,25 @@
                 "all": true
             },
             "dialog": {
+                "message": true,
+                "confirm": true,
                 "open": true,
                 "save": true
             },
             "fs": {
                 "readFile": true,
-                "writeFile": true
+                "writeFile": true,
+                "removeFile":true,
+                "exists": true,
+                "createDir": true,
+                "scope": ["$LOCALDATA/SQLite-Notebook/", "$LOCALDATA/SQLite-Notebook/**"]
+            },
+            "window": {
+                "close": true,
+                "setAlwaysOnTop": true
+            },
+            "path": {
+                "all": true
             }
         },
         "bundle": {
