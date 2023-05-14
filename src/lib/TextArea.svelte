@@ -1,15 +1,17 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
 
-    let font_size;
+    export let sequel: string;
+
+    let font_size: number;
     let textarea;
-    export let sql: string;
+
+    const dispatch = createEventDispatcher();
 
     function resize_textarea() {
-        const newline_count = (textarea.value.match(/\n/g) || []).length;
-        const line_height = font_size * 1.5;
-        const min_height = line_height + 2;
-        const height = Math.max(line_height * (newline_count + 1), min_height);
+        const newline_count = (textarea?.value.match(/\n/g) || []).length;
+        const line_height = font_size * 2;
+        const height = Math.max(line_height * (newline_count + 2), line_height + 2);
         textarea.style.height = `${height}px`;
     }
 
@@ -19,12 +21,19 @@
         font_size = parseFloat(computed_style.fontSize);
         resize_textarea();
     });
+
+    export function _focus() {
+        textarea.focus();
+    }
+
+    afterUpdate(resize_textarea);
 </script>
 
 <textarea
+    on:focus={() => dispatch('active')}
     bind:this={textarea}
     on:input={resize_textarea}
-    bind:value={sql}
+    bind:value={sequel}
     class="textarea-bordered textarea w-full resize-none overflow-hidden focus:outline-none"
-    style="font-size: {font_size}px; line-height: {font_size * 1.5}px;"
+    style="font-size: {font_size}px; line-height: {font_size * 2}px;"
 />
