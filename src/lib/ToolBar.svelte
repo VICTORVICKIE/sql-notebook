@@ -1,8 +1,8 @@
 <script lang="ts">
     import { open, save } from '@tauri-apps/api/dialog';
-    import { readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+    import { exists, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
     import { createEventDispatcher } from 'svelte';
-    import { cell_separator, cells, ids } from './Stores';
+    import { cell_separator, cells, ids, populated } from './Stores';
 
     const dispatch = createEventDispatcher();
 
@@ -41,11 +41,13 @@
     }
 
     async function open_sqlnb() {
+        $populated = false;
         const selected = await open({
             multiple: false,
             filters: [{ name: 'SQLite NoteBook', extensions: ['sqlnb'] }]
         });
         if (selected === null) {
+            $populated = true;
             return;
         }
 
@@ -61,8 +63,14 @@
         const file_path = await save({
             filters: [{ name: 'SQLite NoteBook', extensions: ['sqlnb'] }]
         });
+
+        if (!file_path) return;
+
         const full_sql = await get_full_sql();
         if (full_sql) await writeTextFile(file_path, full_sql);
+
+        // const saved = await exists(file_path);
+        // if (saved) $populated = false;
     }
 </script>
 

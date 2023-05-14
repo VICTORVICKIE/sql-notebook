@@ -11,6 +11,7 @@ export const active_cell = derived(
 );
 
 export const sync = derived([ids, cells], ([$ids, $cells]) => $ids.length === $cells.length);
+export const populated = writable<boolean>(false);
 
 export const cell_separator = '\n--Cell--Separator--\n' as const;
 export const app_name = 'SQLite-Notebook' as const;

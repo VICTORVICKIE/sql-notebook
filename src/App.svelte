@@ -7,11 +7,10 @@
     import { onMount } from 'svelte';
 
     import Cell from './lib/Cell.svelte';
-    import { app_name, cell_separator, cells, ids, sync } from './lib/Stores';
+    import { app_name, cell_separator, cells, ids, populated, sync } from './lib/Stores';
     import ToolBar from './lib/ToolBar.svelte';
 
     let batch_sequel = '';
-    let populated = false;
 
     async function add_cell(index: number, id: number) {
         $ids.splice(index + 1, 0, id);
@@ -19,8 +18,9 @@
     }
 
     async function populate_cell() {
-        if (!$sync || populated) return;
+        if (!$sync || $populated) return;
 
+        console.log('/');
         let sequel_nb = await readTextFile(batch_sequel);
         let cell_sequels = sequel_nb.split(cell_separator);
 
@@ -30,7 +30,7 @@
                 cell.set_sql(cell_sequels[idx]);
             }
         }
-        populated = true;
+        $populated = true;
         $cells[0].focus();
     }
 
@@ -49,6 +49,8 @@
             appWindow.close();
         }
     });
+
+    $: if ($sync) populate_cell();
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -59,7 +61,7 @@
             {#each $ids as id, index (id)}
                 <Cell bind:this={$cells[index]} on:add={() => add_cell(index, $ids.length)} {id} />
             {/each}
-            {@const _ = populate_cell()}
+            <!-- {@const _ = populate_cell()} -->
         {/if}
     </div>
 </div>
