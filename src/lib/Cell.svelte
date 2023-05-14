@@ -1,7 +1,11 @@
 <script lang="ts">
+    import { open, save } from '@tauri-apps/api/dialog';
+    import { readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+    import { join, localDataDir } from '@tauri-apps/api/path';
     import { Command, type ChildProcess } from '@tauri-apps/api/shell';
     import { afterUpdate, createEventDispatcher } from 'svelte';
-    import { ids } from './Stores';
+    import CellActions from './CellActions.svelte';
+    import { active_cell_idx, app_name, ids } from './Stores';
     import TextArea from './TextArea.svelte';
 
     const dispatch = createEventDispatcher();
@@ -9,21 +13,27 @@
     export let id: number;
     $: idx = $ids.indexOf(id);
 
-    let sql = '';
+    export let sql = '';
     let left_icon = 'fluent:play-24-regular';
+    let textarea;
 
     let output: Promise<ChildProcess>;
     let executed = false;
 
+    export function get_id() {
+        return id;
+    }
+
     export async function execute() {
         left_icon = 'line-md:loading-twotone-loop';
+        const temp_db = await join(await localDataDir(), app_name, 'temp.db');
 
-        output = Command.sidecar('bin/sqlite3', ['-header', '-box', 'temp.db', `${sql}`]).execute();
+        output = Command.sidecar('bin/sqlite3', ['-header', '-box', temp_db, `${sql}`]).execute();
 
         executed = true;
     }
 
-    export async function remove() {
+    export async function remove_cell() {
         if (id) {
             idx !== -1 && $ids.splice(idx, 1);
             $ids = $ids;
@@ -38,6 +48,32 @@
         return sql;
     }
 
+    export async function import_sql() {
+        const selected = await open({
+            multiple: false,
+            filters: [{ name: 'SQL', extensions: ['sql'] }]
+        });
+
+        if (selected === null) {
+            return;
+        }
+        let sql = await readTextFile(selected as string);
+        set_sql(sql);
+    }
+
+    export async function export_sql() {
+        const file_path = await save({ filters: [{ name: 'SQL', extensions: ['sql'] }] });
+        await writeTextFile(file_path, sql);
+    }
+
+    export async function clear_cell() {
+        set_sql('');
+    }
+
+    export async function focus() {
+        textarea._focus();
+    }
+
     afterUpdate(() => (left_icon = 'fluent:play-24-regular'));
 </script>
 
@@ -49,7 +85,11 @@
         <p class="ml-2 text-sm font-semibold">sql [{idx}]</p>
     </div>
     <div class="flex flex-col gap-4 text-left">
-        <TextArea bind:sql />
+        <TextArea
+            bind:this={textarea}
+            bind:sequel={sql}
+            on:active={() => ($active_cell_idx = idx)}
+        />
 
         {#if executed}
             {#await output then cell_output}
@@ -59,9 +99,12 @@
             {/await}
         {/if}
     </div>
-    <button class="btn-ghost btn-sm btn mx-auto w-5" on:click={remove}>
-        <iconify-icon class="text-error" icon="fluent:delete-24-regular" width="20" height="20" />
-    </button>
+    <CellActions
+        on:clear={clear_cell}
+        on:remove={remove_cell}
+        on:import={import_sql}
+        on:export={export_sql}
+    />
 </div>
 <div class="divider m-8">
     <button on:click={() => dispatch('add')} class="btn-ghost btn">
