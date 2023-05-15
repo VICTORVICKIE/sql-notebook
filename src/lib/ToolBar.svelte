@@ -41,7 +41,6 @@
     }
 
     async function open_sqlnb() {
-        $populated = false;
         const selected = await open({
             multiple: false,
             filters: [{ name: 'SQLite NoteBook', extensions: ['sqlnb'] }]
@@ -51,6 +50,7 @@
             return;
         }
 
+        $populated = false;
         let sqlnb = await readTextFile(selected as string);
         let cell_sequels = sqlnb.split(cell_separator);
 
