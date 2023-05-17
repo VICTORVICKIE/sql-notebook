@@ -1,39 +1,44 @@
 <script lang="ts">
-    import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
 
-    export let sequel: string;
+    let textarea: HTMLTextAreaElement;
 
     let font_size: number;
-    let textarea;
 
-    const dispatch = createEventDispatcher();
+    onMount(initialize);
+    afterUpdate(() => {
+        resize_textarea();
+    });
 
-    function resize_textarea() {
-        const newline_count = (textarea?.value.match(/\n/g) || []).length;
+    async function initialize() {
+        font_size = parseFloat(window.getComputedStyle(textarea).fontSize);
+        resize_textarea();
+        textarea.focus();
+    }
+    async function resize_textarea() {
+        const newline_count = (textarea.value.match(/\n/g) || []).length;
         const line_height = font_size * 2;
         const height = Math.max(line_height * (newline_count + 2), line_height + 2);
         textarea.style.height = `${height}px`;
     }
 
-    onMount(async () => {
-        textarea.focus();
-        const computed_style = window.getComputedStyle(textarea);
-        font_size = parseFloat(computed_style.fontSize);
-        resize_textarea();
-    });
-
-    export function _focus() {
-        textarea.focus();
+    export function get() {
+        return textarea.value;
     }
 
-    afterUpdate(resize_textarea);
+    export function set(str: string) {
+        textarea.value = str;
+    }
+
+    export async function focus() {
+        textarea.focus();
+    }
 </script>
 
 <textarea
-    on:focus={() => dispatch('active')}
     bind:this={textarea}
     on:input={resize_textarea}
-    bind:value={sequel}
+    on:change={resize_textarea}
     class="textarea-bordered textarea w-full resize-none overflow-hidden focus:outline-none"
     style="font-size: {font_size}px; line-height: {font_size * 2}px;"
 />
