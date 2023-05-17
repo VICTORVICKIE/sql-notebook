@@ -116,7 +116,7 @@
 </script>
 
 <div class="navbar fixed top-0 z-10 bg-base-200">
-    <div class="navbar-start flex gap-0 ml-2">
+    <div class="navbar-start ml-2 flex gap-0">
         <div class="tooltip tooltip-bottom" data-tip="Open File">
             <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={open_sqlnb}>
                 <iconify-icon width="24" height="24" icon="fluent:folder-open-24-regular" />

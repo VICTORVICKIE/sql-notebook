@@ -1,6 +1,6 @@
 <script lang="ts">
     import { open, save } from '@tauri-apps/api/dialog';
-    import { exists, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
+    import { readTextFile, writeTextFile } from '@tauri-apps/api/fs';
     import { join, localDataDir } from '@tauri-apps/api/path';
     import { Command, type ChildProcess } from '@tauri-apps/api/shell';
     import { createEventDispatcher, onMount } from 'svelte';

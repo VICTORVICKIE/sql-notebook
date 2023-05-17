@@ -7,11 +7,11 @@ export const cell_separator = '\n--Cell--Separator--\n' as const;
 export const app_name = 'SQLite-Notebook' as const;
 
 export interface ICell {
-    component?: Cell,
-    init: boolean,
-    id?: number,
-    idx?: number,
-    textarea?: TextArea
-};
+    component?: Cell;
+    init: boolean;
+    id?: number;
+    idx?: number;
+    textarea?: TextArea;
+}
 
-export const notebook = writable(new DoublyLinkedList<ICell>())
+export const notebook = writable(new DoublyLinkedList<ICell>());
