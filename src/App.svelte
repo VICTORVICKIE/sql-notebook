@@ -119,7 +119,12 @@
     <div class="navbar-start ml-2 flex gap-0">
         <div class="tooltip tooltip-bottom" data-tip="Open File">
             <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={open_sqlnb}>
-                <iconify-icon width="24" height="24" icon="fluent:folder-open-24-regular" />
+                <iconify-icon
+                    class="text-neutral-content"
+                    width="24"
+                    height="24"
+                    icon="fluent:folder-open-24-regular"
+                />
             </button>
         </div>
         <div class="tooltip tooltip-bottom" data-tip="Save File">
@@ -139,7 +144,12 @@
     <div class="navbar-end">
         <div class="tooltip tooltip-bottom" data-tip="Run All">
             <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={execute_all}>
-                <iconify-icon width="24" height="24" icon="fluent:play-multiple-16-regular" />
+                <iconify-icon
+                    class="text-success"
+                    width="24"
+                    height="24"
+                    icon="fluent:play-multiple-16-regular"
+                />
             </button>
         </div>
     </div>
