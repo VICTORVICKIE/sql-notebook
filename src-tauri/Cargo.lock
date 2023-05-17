@@ -2490,7 +2490,7 @@ dependencies = [
 
 [[package]]
 name = "sqlite-book"
-version = "2.0.1"
+version = "3.0.0"
 dependencies = [
  "serde",
  "serde_json",
