@@ -152,7 +152,7 @@
             class="btn-ghost min-h-6 btn h-7 w-7"
         >
             <iconify-icon
-                class="text-neutral-content"
+                class="text-base-content"
                 icon="fluent:code-24-filled"
                 width="24"
                 height="24"

@@ -120,7 +120,7 @@
         <div class="tooltip tooltip-bottom" data-tip="Open File">
             <button class="btn-ghost min-h-8 btn h-8 w-6" on:click={open_sqlnb}>
                 <iconify-icon
-                    class="text-neutral-content"
+                    class="text-base-content"
                     width="24"
                     height="24"
                     icon="fluent:folder-open-24-regular"
